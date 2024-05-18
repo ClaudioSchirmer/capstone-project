@@ -5,7 +5,7 @@ Capstone Project
 # Group S 2 G 4   
 
 - Nazmul Alam Nayeem
-
+- Chizoba Orakwue
 
 
 # Data Source
@@ -15,7 +15,14 @@ Capstone Project
 
 # Features
 
+# Nazmul 
 - Add word/tip/definition
 - Order the list by the number of times remembered/forgotten
 - Indicate whether you remembered or forgot the definition(all game types)
 - Shake to show tip and find news definitions using google(open in browser)
+
+# Chizoba
+- Splash Screen
+- Favorite word/tip/definition
+- Filter list by Word/Favorite
+- Play using one specific category
