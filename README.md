@@ -1,6 +1,6 @@
 # SnapLearn
 
-**SnapLearn** will be an engaging and fast-paced flashcard Android game app designed to make learning fun and efficient. Perfect for students and lifelong learners alike, SnapLearn challenges players to quickly recall information across a variety of subjects that interest them.
+**SnapLearn** will be an engaging and fast-paced flashcard Android game app designed to make learning fun and efficient. Perfect for students and lifelong learners alike. SnapLearn challenges players to quickly recall information across a variety of subjects that interest them.
 
 
 # Group S 2 G 4   
@@ -12,7 +12,7 @@
 
 
 # Data Source
-Single-user input: All data is stored locally on the user's device and is not shared with other instances of the app.
+Single-user input: All data will be stored locally on the user's device and will not be shared with other instances of the app.
 
 
 # Features
