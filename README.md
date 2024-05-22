@@ -33,10 +33,10 @@ Single-user input: All data will be stored locally on the user's device and will
 - Users can remove word/tip/definition
 - Users have a list of words along with the count of how many times the user remembered or forgot each word
 - Users can start playing game randomly
-- Users can add Category for each word
+- Users can add category for each word
 
 ### Andrew
 - Users can schedule a reminder to play once a day or once a week 
-- Users have a animated splash screen
+- Users have an animated splash screen
 - Users have the option to search the synonyms using Google
 - Users have an activity chart of the week (sunday to saturday) to check how much words they have remembered or forgotten
