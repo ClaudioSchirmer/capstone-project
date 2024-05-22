@@ -18,25 +18,25 @@ Single-user input: All data will be stored locally on the user's device and will
 # Features
 
 ### Nazmul 
-- Add word/tip/definition
-- Order the list by the number of times remembered/forgotten
-- Indicate whether you remembered or forgot the definition(all game types)
-- Shake to show tip and find news definitions using google(open in browser)
+- Users can add word/tip/definition
+- Users can order the list of words by the number of times remembered or forgotten
+- Users can shake the device while playing to show the tip
+- Users can filter the list by category
 
 ### Chizoba
-- Splash Screen
-- Favorite word/tip/definition
-- Filter list by Word/Favorite
-- Play using one specific category
+- Users can add words to their favourites
+- Users can filter the list using a Word and/or Favourite flag
+- Users have the option to look up the word with a Google search
+- Users can play using one specific category
 
 ### Claudio
-- Remove word/tip/definition
-- List of words along with the count of how many times the user remembered or fogot each word
-- Start playing game randomly + Start playing game with the words the user has previously forgotten
-- Add Category for each Word
+- Users can remove word/tip/definition
+- Users have a list of words along with the count of how many times the user remembered or forgot each word
+- Users can start playing game randomly
+- Users can add Category for each word
 
 ### Andrew
-- Remember to Play ( Notification )
-- Start playing short/fast game ( Limited by 5 Words)
-- Activity chart of the week
-- Filter list by Category
+- Users can schedule a reminder to play once a day or once a week 
+- Users have a animated splash screen
+- Users have the option to search the synonyms using Google
+- Users have an activity chart of the week (sunday to saturday) to check how much words they have remembered or forgotten
