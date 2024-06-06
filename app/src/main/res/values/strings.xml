@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">capstone-project</string>
+    <string name="app_name">SnapLearn</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="word">Word*</string>
+    <string name="tip">Tip</string>
+    <string name="defintion">Defintion*</string>
+    <string name="words">Words</string>
+    <string name="play">Play</string>
+    <string name="notification">Notification</string>
+    <string name="add">Add</string>
+    <string name="add_your_first_word_using_the_button">Add your first word using the + button</string>
+    <string name="add_new_word">Add New Word</string>
 </resources>

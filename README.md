@@ -30,10 +30,10 @@ Single-user input: All data will be stored locally on the user's device and will
 - Users can play using one specific category
 
 ### Claudio
-- Users can remove word/tip/definition
-- Users have a list of words along with the count of how many times the user remembered or forgot each word
-- Users can start playing game randomly
-- Users can add category for each word
+- Users can add word/tip/definition as well as view the list of words added
+- Users can start playing game
+- Users can see in the list of words how many times they have remembered or forgot each word
+- Users can play using one specific category
 
 ### Andrew
 - Users can schedule a reminder to play once a day or once a week 
