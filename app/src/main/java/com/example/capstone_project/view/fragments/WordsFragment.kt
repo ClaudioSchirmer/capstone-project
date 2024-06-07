@@ -1,11 +1,11 @@
 package com.example.capstone_project.view.fragments
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class WordsFragment : ListFragment() {
 
-    private lateinit var adapter: ArrayAdapter<*>
+    private lateinit var adapter: ArrayAdapter<String>
     private lateinit var words: MutableList<String>
     private lateinit var binding: FragmentWordsBinding
 
@@ -39,6 +39,7 @@ class WordsFragment : ListFragment() {
                 if (words.isNotEmpty()) {
                     binding.textViewListEmpty.visibility = View.GONE
                 }
+                registerForContextMenu(listView)
             }
         }
         return binding.root
@@ -48,5 +49,29 @@ class WordsFragment : ListFragment() {
         words.add(word)
         adapter.notifyDataSetChanged()
         binding.textViewListEmpty.visibility = View.GONE
+    }
+
+    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+        v.showContextMenu()
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val info = menuInfo as AdapterView.AdapterContextMenuInfo
+        menu.setHeaderTitle(words[info.position])
+        menu.add(Menu.NONE, 0, 0, "Search Synonyms")
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        val word = words[info.position]
+        when (item.itemId) {
+            0 -> {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=synonyms+of+$word"))
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onContextItemSelected(item)
     }
 }
