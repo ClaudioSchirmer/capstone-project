@@ -1,16 +1,19 @@
 package com.example.capstone_project.view.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.ContextMenu
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import androidx.lifecycle.lifecycleScope
-import com.example.capstone_project.R
 import com.example.capstone_project.databinding.FragmentWordsBinding
 import com.example.capstone_project.infrastructure.data.AppDatabase
 import kotlinx.coroutines.Dispatchers
@@ -60,6 +63,7 @@ class WordsFragment : ListFragment() {
         val info = menuInfo as AdapterView.AdapterContextMenuInfo
         menu.setHeaderTitle(words[info.position])
         menu.add(Menu.NONE, 0, 0, "Search Synonyms")
+        menu.add(Menu.NONE, 1, 1, "Search Definitions")
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -68,6 +72,11 @@ class WordsFragment : ListFragment() {
         when (item.itemId) {
             0 -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=synonyms+of+$word"))
+                startActivity(intent)
+                return true
+            }
+            1 -> {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=definition+of+$word"))
                 startActivity(intent)
                 return true
             }
