@@ -5,10 +5,6 @@
     android:id="@+id/bottom_menu_list"
     android:icon="@drawable/outline_data_check_24"/>
 
-    <item android:title="@string/notification"
-    android:id="@+id/bottom_menu_notification"
-    android:icon="@drawable/outline_add_alert_24"/>
-
     <item android:title="@string/settings"
     android:visible="false"
     android:id="@+id/bottom_menu_settings"

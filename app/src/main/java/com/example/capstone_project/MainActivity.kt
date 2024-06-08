@@ -1,14 +1,12 @@
 package com.example.capstone_project
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.capstone_project.databinding.ActivityMainBinding
 import com.example.capstone_project.view.fragments.AddWordFragment
-import com.example.capstone_project.view.fragments.NotificationFragment
 import com.example.capstone_project.view.fragments.WordsFragment
 import com.example.capstone_project.view.fragments.SettingsFragment
 
@@ -29,10 +27,6 @@ class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
                     menu.clear()
                     menuInflater.inflate(R.menu.words, menu)
                     WordsFragment().show()
-                }
-                R.id.bottom_menu_notification -> {
-                    menu.clear()
-                    NotificationFragment().show()
                 }
                 R.id.bottom_menu_settings -> {
                     menu.clear()
@@ -70,13 +64,6 @@ class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
     private fun Fragment.show() {
         with(supportFragmentManager.beginTransaction()) {
             replace(R.id.fragmentContainerView, this@show)
-            if (this@show::class.simpleName != "HomeFragment") {
-                addToBackStack(this::class.simpleName)
-            } else {
-                for (i in 0 until supportFragmentManager.backStackEntryCount) {
-                    supportFragmentManager.popBackStack()
-                }
-            }
             commit()
         }
     }
