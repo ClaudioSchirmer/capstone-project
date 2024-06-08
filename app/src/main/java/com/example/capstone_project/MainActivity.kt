@@ -1,15 +1,14 @@
 package com.example.capstone_project
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.capstone_project.databinding.ActivityMainBinding
 import com.example.capstone_project.view.fragments.AddWordFragment
-import com.example.capstone_project.view.fragments.WordsFragment
 import com.example.capstone_project.view.fragments.SettingsFragment
+import com.example.capstone_project.view.fragments.WordsFragment
 
 
 class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
