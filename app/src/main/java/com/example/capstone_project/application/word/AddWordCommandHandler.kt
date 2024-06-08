@@ -41,10 +41,10 @@ class AddWordCommandHandler(
         if (this.isNullOrBlank()) {
             addNotification("${fieldName.replaceFirstChar { it.titlecase() }} is required!")
         }
-        if (this?.any { !it.isLetter() && !it.isWhitespace() } == true) {
+        if (this?.any { !it.isLetter() && !it.isWhitespace() && it != '.' && it != ',' } == true) {
             addNotification("You must use only letters!")
         }
-        if ((this?.trim()?.length ?: 0) <= 1) {
+        if ((this?.trim()?.replace("[,.]".toRegex(), "")?.length ?: 0) <= 1) {
             addNotification("${fieldName.replaceFirstChar { it.titlecase() }} should have at least 2 letters!")
         }
     }
