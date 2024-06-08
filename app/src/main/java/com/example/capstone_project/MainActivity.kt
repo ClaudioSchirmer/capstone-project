@@ -10,6 +10,7 @@ import com.example.capstone_project.databinding.ActivityMainBinding
 import com.example.capstone_project.view.fragments.AddWordFragment
 import com.example.capstone_project.view.fragments.NotificationFragment
 import com.example.capstone_project.view.fragments.WordsFragment
+import com.example.capstone_project.view.fragments.SettingsFragment
 
 
 class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
@@ -32,6 +33,10 @@ class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
                 R.id.bottom_menu_notification -> {
                     menu.clear()
                     NotificationFragment().show()
+                }
+                R.id.bottom_menu_settings -> {
+                    menu.clear()
+                    SettingsFragment().show()
                 }
             }
             true
