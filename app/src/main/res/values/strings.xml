@@ -14,6 +14,7 @@
     <string name="add">Add</string>
     <string name="add_your_first_word_using_the_button">Add your first word using the + button</string>
     <string name="add_new_word">Add New Word</string>
+    <string name="search">Search</string>
     <string name="set_alarm_time">Set Alarm Time</string>
     <string name="alarm_time">Please set alarm</string>
     <string name="switch_alarm">Allow Alarm</string>
