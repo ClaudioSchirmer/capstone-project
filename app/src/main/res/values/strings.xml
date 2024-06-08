@@ -16,4 +16,10 @@
     <string name="add_new_word">Add New Word</string>
     <string name="set_alarm_time">Set Alarm Time</string>
     <string name="alarm_time">Please set alarm</string>
+    <string name="switch_alarm">Allow Alarm</string>
+    <string name="btn_set_alarm">Set Alarm</string>
+    <string name="btn_cancel_alarm">Cancel Alarm</string>
+    <string name="alarm_channel_id">fanshawe</string>
+    <string name="alarm_title">SnapLearn</string>
+    <string name="alarm_text">It\'s time to connect SnapLearn right now.</string>
 </resources>

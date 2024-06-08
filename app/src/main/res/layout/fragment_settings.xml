@@ -14,30 +14,55 @@
 
         <TextView
             android:id="@+id/sub_title_setting"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
             android:text="@string/settings"
             android:textAlignment="center"
             android:textSize="34sp" />
 
         <Button
             android:id="@+id/btnPickTime"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
             android:text="@string/set_alarm_time"
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tvTime"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
             android:text="@string/alarm_time"
             android:textAlignment="center"
             android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSetAlarm"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/btn_set_alarm" />
+
+            <Button
+                android:id="@+id/btnCancelAlarm"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/btn_cancel_alarm" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
