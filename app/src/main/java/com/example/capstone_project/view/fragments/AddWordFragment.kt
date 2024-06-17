@@ -19,11 +19,11 @@ import kotlinx.coroutines.launch
 class AddWordFragment : DialogFragment() {
 
     private lateinit var binding: FragmentAddWordBinding
-    private lateinit var onAddWordHandler: onAddWord
+    private lateinit var onAddWordHandler: OnAddWord
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onAddWordHandler = context as? onAddWord ?: onAddWord {
+        onAddWordHandler = context as? OnAddWord ?: OnAddWord {
             Log.d(this::class.simpleName, "onAddWordHandler has not been defined!")
             dismiss()
         }
@@ -44,7 +44,7 @@ class AddWordFragment : DialogFragment() {
         binding.textViewErrorDefinition.visibility = View.INVISIBLE
         binding.textViewErrorWord.visibility = View.INVISIBLE
 
-        binding.buttonSave.setOnClickListener(onSaveTapped())
+        binding.buttonSave.setOnClickListener(::onSaveTapped)
         binding.imageButtonClose.setOnClickListener {
             dismiss()
         }
@@ -52,7 +52,7 @@ class AddWordFragment : DialogFragment() {
         return binding.root
     }
 
-    private fun onSaveTapped() : View.() -> Unit = {
+    private fun onSaveTapped(view: View) {
         binding.textViewErrorDefinition.visibility = View.INVISIBLE
         binding.textViewErrorWord.visibility = View.INVISIBLE
         binding.buttonSave.isEnabled = false
@@ -87,7 +87,7 @@ class AddWordFragment : DialogFragment() {
         }
     }
 
-    internal fun interface onAddWord {
+    internal fun interface OnAddWord {
         fun onAddWord(word:String)
     }
 }

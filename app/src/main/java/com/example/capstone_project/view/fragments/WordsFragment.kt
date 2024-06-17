@@ -30,6 +30,7 @@ class WordsFragment : ListFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentWordsBinding.inflate(layoutInflater)
+        binding.textViewListEmpty.visibility = View.INVISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
             words = AppDatabase(requireContext()).WordDAO().getAll().map { it.word }.toMutableList()
             adapter = ArrayAdapter(
@@ -41,6 +42,8 @@ class WordsFragment : ListFragment() {
                 listAdapter = adapter
                 if (words.isNotEmpty()) {
                     binding.textViewListEmpty.visibility = View.GONE
+                } else {
+                    binding.textViewListEmpty.visibility = View.VISIBLE
                 }
                 registerForContextMenu(listView)
             }

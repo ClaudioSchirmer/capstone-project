@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "30637559388b8805d2f1210bf14b8cc2",
+    "identityHash": "7a189545f7097bc24cccd96592cf8a81",
     "entities": [
       {
         "tableName": "words",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `word` TEXT NOT NULL, `definition` TEXT NOT NULL, `tip` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `word` TEXT NOT NULL, `definition` TEXT NOT NULL, `tip` TEXT, `pass` INTEGER NOT NULL, `fail` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -31,6 +31,18 @@
             "columnName": "tip",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "pass",
+            "columnName": "pass",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fail",
+            "columnName": "fail",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -46,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '30637559388b8805d2f1210bf14b8cc2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7a189545f7097bc24cccd96592cf8a81')"
     ]
   }
 }
