@@ -23,4 +23,11 @@
     <string name="alarm_channel_id">fanshawe</string>
     <string name="alarm_title">SnapLearn</string>
     <string name="alarm_text">It\'s time to connect SnapLearn right now.</string>
+    <string name="exit">Exit</string>
+    <string name="words_have_been_reviewed_keep_it_up">words have been reviewed. Keep it up!</string>
+    <string name="well_done">words were correct! Well done!!</string>
+    <string name="don_t_give_up_play_again_to_get_it_right">words were wrong. Keep practicing!</string>
+    <string name="stop_playing">Stop Playing</string>
+    <string name="explore_the_available_words_and_play">Explore the available words and play!</string>
+    <string name="words_available">%1$s words</string>
 </resources>

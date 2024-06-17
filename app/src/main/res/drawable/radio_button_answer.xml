@@ -1,0 +1,16 @@
+<!-- Customize the background for the RadioButton options -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Unchecked state -->
+    <item android:state_checked="false">
+        <layer-list>
+            <item>
+                <!-- Background with rounded corners and stroke -->
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp" /> <!-- Adjust radius as needed -->
+                    <stroke android:color="@color/material_on_surface_stroke" android:width="2dp" /> <!-- Stroke color and width -->
+                    <solid android:color="@android:color/white" /> <!-- Background color -->
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

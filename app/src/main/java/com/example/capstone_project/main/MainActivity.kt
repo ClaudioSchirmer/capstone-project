@@ -1,17 +1,21 @@
-package com.example.capstone_project
+package com.example.capstone_project.main
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.capstone_project.R
 import com.example.capstone_project.databinding.ActivityMainBinding
 import com.example.capstone_project.view.fragments.AddWordFragment
+import com.example.capstone_project.view.fragments.PlayFragment
 import com.example.capstone_project.view.fragments.SettingsFragment
 import com.example.capstone_project.view.fragments.WordsFragment
 
 
-class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
+class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
+    BottomNavigationViewController {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var menu: Menu
@@ -28,6 +32,11 @@ class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
                     menu.clear()
                     menuInflater.inflate(R.menu.words, menu)
                     WordsFragment().show()
+                }
+
+                R.id.bottom_menu_play -> {
+                    menu.clear()
+                    PlayFragment().show()
                 }
 
                 R.id.bottom_menu_settings -> {
@@ -75,4 +84,29 @@ class MainActivity : AppCompatActivity(), AddWordFragment.onAddWord {
             }
         }
     }
+
+    override fun hide(onCompleted: () -> Unit) {
+        with(binding.tabNavigation) {
+            animate().translationY((binding.tabNavigation.height).toFloat())
+                .setDuration(500)
+                .withEndAction {
+                    visibility = View.GONE
+                    onCompleted()
+                }
+                .start();
+        }
+    }
+
+    override fun show(onCompleted: () -> Unit) {
+        with(binding.tabNavigation) {
+            visibility = View.VISIBLE
+            animate().translationY(0F)
+                .setDuration(500)
+                .withEndAction {
+                    onCompleted()
+                }
+                .start();
+        }
+    }
+
 }
