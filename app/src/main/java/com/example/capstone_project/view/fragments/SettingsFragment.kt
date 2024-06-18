@@ -8,8 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.capstone_project.AlarmReceiver
+import com.example.capstone_project.R
 import com.example.capstone_project.databinding.FragmentSettingsBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -58,12 +57,9 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
-        binding.btnPickTime.setOnClickListener {
-            showTimePicker()
-        }
 
         binding.btnSetAlarm.setOnClickListener {
-            setAlarm()
+            showTimePicker()
         }
 
         binding.btnCancelAlarm.setOnClickListener {
@@ -80,7 +76,7 @@ class SettingsFragment : Fragment() {
             calendar.set(Calendar.MINUTE, minute)
             calendar.set(Calendar.SECOND, 0)
             calendar.set(Calendar.MILLISECOND, 0)
-            binding.tvTime.text = SimpleDateFormat("HH:mm").format(calendar.time)
+            setAlarm()
         }
         TimePickerDialog(
             this.requireContext(),
@@ -99,6 +95,8 @@ class SettingsFragment : Fragment() {
             Intent(requireContext(), AlarmReceiver::class.java),
             PendingIntent.FLAG_IMMUTABLE)
 
+        alarmManager.cancel(pendingIntent)
+
         // Set the alarm for testing
         /*
         alarmManager.set(
@@ -114,7 +112,7 @@ class SettingsFragment : Fragment() {
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             AlarmManager.INTERVAL_DAY, // Repeat every day
-            // 1000 * 60, // Repeat test every 1 minute
+            //1000 * 60, // Repeat test every 1 minute
             pendingIntent
         )
 
@@ -122,7 +120,8 @@ class SettingsFragment : Fragment() {
             registerForActivityResult.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
         }
 
-        Toast.makeText(requireContext(), "Alarm Set", Toast.LENGTH_SHORT).show()
+        binding.tvTime.text = String.format("Every Day at %s", SimpleDateFormat("HH:mm").format(calendar.time))
+        Toast.makeText(requireContext(), String.format("Alarm Set : %s", SimpleDateFormat("HH:mm").format(calendar.time)), Toast.LENGTH_SHORT).show()
     }
 
     private fun cancelAlarm() {
@@ -135,6 +134,7 @@ class SettingsFragment : Fragment() {
 
         alarmManager.cancel(pendingIntent)
 
+        binding.tvTime.text = requireContext().getString(R.string.alarm_time)
         Toast.makeText(requireContext(), "Alarm Cancelled", Toast.LENGTH_SHORT).show()
     }
 }
