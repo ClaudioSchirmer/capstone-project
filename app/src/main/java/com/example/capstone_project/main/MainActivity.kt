@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.capstone_project.PreferenceUtil
 import com.example.capstone_project.R
 import com.example.capstone_project.databinding.ActivityMainBinding
 import com.example.capstone_project.view.fragments.AddWordFragment
@@ -21,9 +22,14 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
     private lateinit var menu: Menu
     private var lastFragmentName: String? = "WordsFragment"
 
+    companion object {
+        lateinit var preferences: PreferenceUtil
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        preferences = PreferenceUtil(binding.root.context)
         setContentView(binding.root)
 
         binding.tabNavigation.setOnItemSelectedListener {

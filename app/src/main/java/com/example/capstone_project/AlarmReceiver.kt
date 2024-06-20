@@ -1,40 +1,26 @@
 package com.example.capstone_project
 
-import android.Manifest
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
+import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.example.capstone_project.main.MainActivity
+import com.example.capstone_project.helper.NotificationHelper
+import java.util.Calendar
 
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        intent!!.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val pendingIntent = PendingIntent.getActivity(context, 0,
-            Intent(context, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE)
+        Log.d(this::class.simpleName, "Notification Alarm Start")
 
-        val builder = NotificationCompat.Builder(context!!, context.getString(R.string.alarm_channel_id))
-            .setSmallIcon(R.drawable.outline_add_alert_24)
-            .setContentTitle(context.getString(R.string.alarm_title))
-            .setContentText(context.getString(R.string.alarm_text))
-            .setAutoCancel(true)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
+        var calendar: Calendar = Calendar.getInstance()
+        var notificationHelper: NotificationHelper = NotificationHelper(context)
+        var nb: NotificationCompat.Builder = notificationHelper.getChannelNotification(calendar.time.toString())
+        notificationHelper.getManager().notify(1, nb.build())
 
-        val notificationManager = NotificationManagerCompat.from(context)
-
-        if (ActivityCompat.checkSelfPermission( context, Manifest.permission.POST_NOTIFICATIONS ) != PackageManager.PERMISSION_GRANTED ) {
-            return
-        }
-
-        notificationManager.notify(123, builder.build())
+        Log.d(this::class.simpleName, "Notification Alarm End")
     }
 }

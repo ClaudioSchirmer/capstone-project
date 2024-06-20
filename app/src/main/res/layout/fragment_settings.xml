@@ -22,15 +22,6 @@
             android:textAlignment="center"
             android:textSize="34sp" />
 
-        <Button
-            android:id="@+id/btnPickTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="@string/set_alarm_time"
-            android:textAlignment="center" />
-
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
