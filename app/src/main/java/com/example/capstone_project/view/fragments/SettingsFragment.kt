@@ -26,8 +26,6 @@ class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var calendar: Calendar
-    private lateinit var alarmManager: AlarmManager
-    private lateinit var pendingIntent: PendingIntent
 
     companion object {
         const val DENIED = "denied"
@@ -113,19 +111,17 @@ class SettingsFragment : Fragment() {
             calendar.add(Calendar.DATE, 1)
         }
 
-        // Set the alarm
+        // Set the alarm for Testing
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
-        /*
+        // Set the alarm for Repeating
         alarmManager.setRepeating(
             AlarmManager.ELAPSED_REALTIME,
             calendar.timeInMillis,
             AlarmManager.INTERVAL_DAY, // Repeat every day
             //1000 * 60, // Repeat test every 1 minute
-            //1000 * 60 * 60, // Repeat test every 1 hour
             pendingIntent
         )
-         */
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerForActivityResult.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
@@ -136,12 +132,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun cancelAlarm() {
-        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            1,
-            Intent(requireContext(), AlarmReceiver::class.java),
-            PendingIntent.FLAG_IMMUTABLE)
+        var alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        var intent = Intent(requireContext(), AlarmReceiver::class.java)
+        var pendingIntent = PendingIntent.getBroadcast( requireContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE)
 
         alarmManager.cancel(pendingIntent)
 
