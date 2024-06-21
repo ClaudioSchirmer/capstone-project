@@ -36,39 +36,26 @@ class WordsFragment : Fragment() {
 
         binding.list.adapter = adapter
 
-        loadWordsFromDatabase()
-
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                if (words.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        binding.textViewListEmpty.visibility = View.GONE
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        binding.textViewListEmpty.visibility = View.VISIBLE
-                    }
-                }
-            }
+        if (savedInstanceState == null) {
+            loadWords()
         }
 
-        registerForContextMenu(binding.list)
         return binding.root
     }
 
-    private fun loadWordsFromDatabase() {
+    private fun loadWords() {
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                val loadedWords = AppDatabase.getDatabase(requireContext()).wordDAO().getAll()
-                withContext(Dispatchers.Main) {
-                    words.clear()
-                    loadedWords.forEach { word ->
-                        if (!words.any { it.word == word.word }) {
-                            words.add(word)
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
-                }
+            val loadedWords = withContext(Dispatchers.IO) {
+                AppDatabase.getDatabase(requireContext()).wordDAO().getAll()
+            }
+            words.clear()
+            words.addAll(loadedWords)
+            adapter.notifyDataSetChanged()
+
+            if (words.isNotEmpty()) {
+                binding.textViewListEmpty.visibility = View.GONE
+            } else {
+                binding.textViewListEmpty.visibility = View.VISIBLE
             }
         }
     }
@@ -77,29 +64,25 @@ class WordsFragment : Fragment() {
         word.isFavorite = !word.isFavorite
         lifecycleScope.launch(Dispatchers.IO) {
             AppDatabase.getDatabase(requireContext()).wordDAO().updateFavoriteStatus(word)
+            withContext(Dispatchers.Main) {
+                loadWords()
+            }
         }
-        adapter.notifyDataSetChanged()
     }
 
     fun addWordToList(wordText: String) {
-        val existingWord = words.find { it.word == wordText }
-        if (existingWord != null) {
-            return
-        }
-
-        val newWord = Word(word = wordText, definition = "", isFavorite = false)
-        words.add(newWord)
-        adapter.notifyDataSetChanged()
-
         lifecycleScope.launch(Dispatchers.IO) {
-            AppDatabase.getDatabase(requireContext()).wordDAO().insert(newWord)
+            AppDatabase.getDatabase(requireContext()).wordDAO().findByWord(wordText)
+            withContext(Dispatchers.Main) {
+                loadWords()
+            }
         }
     }
 
     private fun showContextMenu(word: Word, view: View) {
         val menu = PopupMenu(requireContext(), view)
         menu.menu.add(0, 0, 0, "Search Synonyms")
-        menu.menu.add(0, 2, 1, "Search Definitions")
+        menu.menu.add(0, 1, 1, "Search Definitions")
         menu.setOnMenuItemClickListener { item ->
             when (item.order) {
                 0 -> {
