@@ -14,7 +14,6 @@ import com.example.capstone_project.view.fragments.PlayFragment
 import com.example.capstone_project.view.fragments.SettingsFragment
 import com.example.capstone_project.view.fragments.WordsFragment
 
-
 class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
     BottomNavigationViewController {
 
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
                     visibility = View.GONE
                     onCompleted()
                 }
-                .start();
+                .start()
         }
     }
 
@@ -111,8 +110,7 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
                 .withEndAction {
                     onCompleted()
                 }
-                .start();
+                .start()
         }
     }
-
 }

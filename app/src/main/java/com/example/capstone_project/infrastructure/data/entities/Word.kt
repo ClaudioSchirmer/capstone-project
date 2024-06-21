@@ -12,7 +12,8 @@ data class Word(
     @ColumnInfo(name = "definition") val definition: String,
     @ColumnInfo(name = "tip") val tip: String? = null,
     @ColumnInfo(name = "pass") var pass: Int = 0,
-    @ColumnInfo(name = "fail") var fail: Int = 0
+    @ColumnInfo(name = "fail") var fail: Int = 0,
+    @ColumnInfo(name = "isFavorite") var isFavorite: Boolean = false,
 ) {
     @Ignore var used: Boolean = false
 }

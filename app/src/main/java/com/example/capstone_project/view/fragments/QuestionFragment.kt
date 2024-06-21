@@ -48,7 +48,7 @@ class QuestionFragment : Fragment() {
         binding.textViewPlayedWithNumber.visibility = View.INVISIBLE
         hide()
         lifecycleScope.launch(Dispatchers.IO) {
-            wordDao = AppDatabase(requireContext()).WordDAO()
+            wordDao = AppDatabase(requireContext()).wordDAO()
             words = wordDao.getAll()
             launch(Dispatchers.Main) {
                 nextQuestion()
