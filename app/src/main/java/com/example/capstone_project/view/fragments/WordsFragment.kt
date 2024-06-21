@@ -3,7 +3,6 @@ package com.example.capstone_project.view.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,7 +60,6 @@ class WordsFragment : Fragment() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 val loadedWords = AppDatabase.getDatabase(requireContext()).wordDAO().getAll()
-                Log.d("WordsFragment", "Loaded words from database: ${loadedWords.size}")
                 withContext(Dispatchers.Main) {
                     words.clear()
                     loadedWords.forEach { word ->
@@ -70,7 +68,6 @@ class WordsFragment : Fragment() {
                         }
                     }
                     adapter.notifyDataSetChanged()
-                    Log.d("WordsFragment", "Current words list size after loading: ${words.size}")
                 }
             }
         }
@@ -80,7 +77,6 @@ class WordsFragment : Fragment() {
         word.isFavorite = !word.isFavorite
         lifecycleScope.launch(Dispatchers.IO) {
             AppDatabase.getDatabase(requireContext()).wordDAO().updateFavoriteStatus(word)
-            Log.d("WordsFragment", "Updated favorite status for word: ${word.word} to ${word.isFavorite}")
         }
         adapter.notifyDataSetChanged()
     }
@@ -88,7 +84,6 @@ class WordsFragment : Fragment() {
     fun addWordToList(wordText: String) {
         val existingWord = words.find { it.word == wordText }
         if (existingWord != null) {
-            Log.d("WordsFragment", "Word already exists: $wordText")
             return
         }
 
@@ -98,7 +93,6 @@ class WordsFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             AppDatabase.getDatabase(requireContext()).wordDAO().insert(newWord)
-            Log.d("WordsFragment", "Inserted new word into database: $wordText")
         }
     }
 
