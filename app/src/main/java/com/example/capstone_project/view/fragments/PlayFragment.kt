@@ -1,6 +1,5 @@
 package com.example.capstone_project.view.fragments
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
@@ -38,7 +37,7 @@ class PlayFragment : Fragment() {
         binding.textViewPlayWith.visibility = View.INVISIBLE
         binding.textViewPlayWithNumber.visibility = View.INVISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
-            numberOfWords = AppDatabase(requireContext()).WordDAO().count()
+            numberOfWords = AppDatabase(requireContext()).wordDAO().count()
             launch(Dispatchers.Main) {
                 binding.textViewPlayWithNumber.text = getString(R.string.words_available, numberOfWords.toString())
                 binding.textViewPlayWith.visibility = View.VISIBLE

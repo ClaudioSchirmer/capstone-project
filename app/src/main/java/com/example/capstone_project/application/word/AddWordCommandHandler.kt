@@ -19,7 +19,7 @@ class AddWordCommandHandler(
         if (notifications.isNotEmpty())
             throw ApplicationNotification(notifications)
 
-        AppDatabase(context = context).WordDAO().insertAll(
+        AppDatabase(context = context).wordDAO().insertAll(
             Word(
                 uid = null,
                 word = command.word!!,

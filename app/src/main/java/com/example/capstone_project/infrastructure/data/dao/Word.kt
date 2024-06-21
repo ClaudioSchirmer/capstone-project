@@ -12,6 +12,9 @@ interface Word {
     @Query("SELECT * FROM words")
     fun getAll(): List<Word>
 
+    @Query("SELECT * FROM words WHERE isFavorite = 1")
+    fun getFavorites(): List<Word>
+
     @Query("SELECT * FROM words WHERE word LIKE :word LIMIT 1")
     fun findByWord(word: String): Word
 
@@ -19,10 +22,16 @@ interface Word {
     fun count() : Int
 
     @Insert
+    fun insert(word: Word)
+
+    @Insert
     fun insertAll(vararg words: Word)
 
     @Update
     fun updatePass(word: Word)
+
+    @Update
+    fun updateFavoriteStatus(word: Word)
 
     @Delete
     fun delete(word: Word)
