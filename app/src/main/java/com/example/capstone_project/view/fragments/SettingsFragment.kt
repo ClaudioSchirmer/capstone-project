@@ -114,14 +114,7 @@ class SettingsFragment : Fragment() {
         // Set the alarm for Testing
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
-        // Set the alarm for Repeating
-        alarmManager.setRepeating(
-            AlarmManager.ELAPSED_REALTIME,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY, // Repeat every day
-            //1000 * 60, // Repeat test every 1 minute
-            pendingIntent
-        )
+        Log.d(this::class.simpleName, String.format("set first alarm : %s", calendar.time.toString()))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerForActivityResult.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
