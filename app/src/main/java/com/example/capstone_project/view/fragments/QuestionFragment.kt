@@ -1,10 +1,16 @@
 package com.example.capstone_project.view.fragments
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.capstone_project.databinding.FragmentQuestionBinding
@@ -13,10 +19,11 @@ import com.example.capstone_project.infrastructure.data.entities.Word
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.sqrt
 import kotlin.random.Random
 import com.example.capstone_project.infrastructure.data.dao.Word as WordDao
 
-class QuestionFragment : Fragment() {
+class QuestionFragment : Fragment(), SensorEventListener {
 
     private lateinit var binding: FragmentQuestionBinding
     private lateinit var words: List<Word>
@@ -26,12 +33,16 @@ class QuestionFragment : Fragment() {
     private var pass: Int = 0
     private var fail: Int = 0
     private var total: Int = 0
+    private lateinit var sensorManager: SensorManager
+    private var acceleration = 0f
+    private var currentAcceleration = 0f
+    private var lastAcceleration = 0f
+    private var lastShakeTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString("a")
-
         }
     }
 
@@ -55,7 +66,22 @@ class QuestionFragment : Fragment() {
             }
         }
         binding.radioGroupOptions.setOnCheckedChangeListener(::onCheckedChange)
+
+        // Initialize shake detection
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
+        acceleration = SensorManager.GRAVITY_EARTH
+        currentAcceleration = SensorManager.GRAVITY_EARTH
+        lastAcceleration = SensorManager.GRAVITY_EARTH
+
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Unregister shake detection
+        sensorManager.unregisterListener(this)
     }
 
     private fun onCheckedChange(group: ViewGroup, checkedId: Int) {
@@ -168,5 +194,29 @@ class QuestionFragment : Fragment() {
                 binding.radioGroupOptions.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
+
+            lastAcceleration = currentAcceleration
+            currentAcceleration = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+            val delta = currentAcceleration - lastAcceleration
+            acceleration = acceleration * 0.9f + delta
+
+            val currentTime = System.currentTimeMillis()
+            if (acceleration > 5 && currentTime - lastShakeTime > 500) { // Reduced threshold and debounce time
+                lastShakeTime = currentTime
+                // Show the tip in a toast
+                Toast.makeText(context, currentWord.tip, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Do nothing
     }
 }
