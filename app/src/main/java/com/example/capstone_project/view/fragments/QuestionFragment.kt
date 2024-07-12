@@ -1,6 +1,7 @@
 package com.example.capstone_project.view.fragments
 
 import android.content.Context
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -13,6 +14,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.capstone_project.R
 import com.example.capstone_project.databinding.FragmentQuestionBinding
 import com.example.capstone_project.infrastructure.data.AppDatabase
 import com.example.capstone_project.infrastructure.data.entities.Word
@@ -38,6 +40,7 @@ class QuestionFragment : Fragment(), SensorEventListener {
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
     private var lastShakeTime: Long = 0
+    private var lastQuestionResult: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +93,11 @@ class QuestionFragment : Fragment(), SensorEventListener {
         if (itemClicked.text == wordToUpdate.word) {
             wordToUpdate.pass++
             pass++
+            lastQuestionResult = true
         } else {
             wordToUpdate.fail++
             fail++
+            lastQuestionResult = false
         }
         lifecycleScope.launch(Dispatchers.IO) {
             wordDao.updatePass(wordToUpdate)
@@ -190,10 +195,36 @@ class QuestionFragment : Fragment(), SensorEventListener {
             delay(500)
             lifecycleScope.launch(Dispatchers.Main) {
                 binding.progressBar.visibility = View.INVISIBLE
+
+                showFeedback(lastQuestionResult)
+                delay(1000)
+                hideFeedback()
+
                 binding.textViewDefinition.visibility = View.VISIBLE
                 binding.radioGroupOptions.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun showFeedback(result: Boolean?) {
+        if (result != null) {
+            if (result == true) {
+                binding.textViewResult.text = getString(R.string.question_result_pass, pass)
+                binding.imageViewResultPass.visibility = View.VISIBLE
+            } else {
+                binding.textViewResult.text = getString(R.string.question_result_fail, fail)
+                binding.imageViewResultFail.visibility = View.VISIBLE
+            }
+            binding.textViewResult.visibility = View.VISIBLE
+            binding.layoutResult.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideFeedback() {
+        binding.imageViewResultPass.visibility = View.GONE
+        binding.imageViewResultFail.visibility = View.GONE
+        binding.textViewResult.visibility = View.GONE
+        binding.layoutResult.visibility = View.GONE
     }
 
     override fun onSensorChanged(event: SensorEvent) {
