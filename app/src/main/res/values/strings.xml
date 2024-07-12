@@ -30,6 +30,4 @@
     <string name="stop_playing">Stop Playing</string>
     <string name="explore_the_available_words_and_play">Explore the available words and play!</string>
     <string name="words_available">%1$s words</string>
-    <string name="question_result_pass">The answer is correct.\nTotal correct: %d</string>
-    <string name="question_result_fail">The answer is incorrect.\nTotal incorrect: %d</string>
 </resources>

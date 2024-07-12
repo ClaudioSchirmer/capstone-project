@@ -166,42 +166,4 @@
         android:textStyle="italic"
         />
 
-    <LinearLayout
-        android:id="@+id/layoutResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDefinition">
-
-        <ImageView
-            android:id="@+id/imageViewResultPass"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:src="@android:drawable/ic_input_add"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/imageViewResultFail"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:src="@android:drawable/ic_delete"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textStyle="italic"
-            android:textSize="18sp"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
