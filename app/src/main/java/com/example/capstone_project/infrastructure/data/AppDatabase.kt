@@ -7,12 +7,16 @@ import androidx.room.RoomDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.example.capstone_project.infrastructure.data.dao.Word as WordDAO
+import com.example.capstone_project.infrastructure.data.dao.Stat as StatDAO
 import com.example.capstone_project.infrastructure.data.entities.Word as WordEntity
+import com.example.capstone_project.infrastructure.data.entities.Stat as StatEntity
 
-@Database(entities = [WordEntity::class], version = 2)
+@Database(entities = [WordEntity::class, StatEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun wordDAO(): WordDAO
+
+    abstract fun statDao(): StatDAO
 
     companion object {
 
