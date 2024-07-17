@@ -11,7 +11,7 @@ import com.example.capstone_project.infrastructure.data.dao.Stat as StatDAO
 import com.example.capstone_project.infrastructure.data.entities.Word as WordEntity
 import com.example.capstone_project.infrastructure.data.entities.Stat as StatEntity
 
-@Database(entities = [WordEntity::class, StatEntity::class], version = 5)
+@Database(entities = [WordEntity::class, StatEntity::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun wordDAO(): WordDAO

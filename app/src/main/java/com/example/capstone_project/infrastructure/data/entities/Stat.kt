@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "stats")
 data class Stat(
-    @PrimaryKey(autoGenerate = true) val uid: Int? = null,
+    @PrimaryKey(autoGenerate = true) val uid: Int,
     @ColumnInfo(name = "dateInfo") var dateInfo: String?,
     @ColumnInfo(name = "wordUid") var wordUid: Int,
     @ColumnInfo(name = "isRemember") var isRemember: Boolean = false,
