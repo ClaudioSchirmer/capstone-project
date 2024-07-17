@@ -12,6 +12,7 @@ import com.example.capstone_project.databinding.ActivityMainBinding
 import com.example.capstone_project.view.fragments.AddWordFragment
 import com.example.capstone_project.view.fragments.PlayFragment
 import com.example.capstone_project.view.fragments.SettingsFragment
+import com.example.capstone_project.view.fragments.StatsFragment
 import com.example.capstone_project.view.fragments.WordsFragment
 
 class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
@@ -42,6 +43,11 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
                 R.id.bottom_menu_play -> {
                     menu.clear()
                     PlayFragment().show()
+                }
+
+                R.id.bottom_menu_stats -> {
+                    menu.clear()
+                    StatsFragment().show()
                 }
 
                 R.id.bottom_menu_settings -> {

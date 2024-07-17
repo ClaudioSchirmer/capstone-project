@@ -9,8 +9,8 @@
         android:id="@+id/bottom_menu_play"
         android:icon="@drawable/outline_autoplay_24"/>
 
-    <item android:title="@string/stat"
-        android:id="@+id/bottom_menu_stat"
+    <item android:title="@string/stats"
+        android:id="@+id/bottom_menu_stats"
         android:icon="@drawable/outline_add_bar_chart"/>
 
     <item android:title="@string/settings"
