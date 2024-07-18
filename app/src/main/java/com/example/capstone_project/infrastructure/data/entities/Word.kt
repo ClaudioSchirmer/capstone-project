@@ -17,4 +17,6 @@ data class Word(
     @ColumnInfo(name = "isFavorite") var isFavorite: Boolean = false,
 ) {
     @Ignore var used: Boolean = false
+    @Ignore var hits: Long = 0
+    @Ignore var misses: Long = 0
 }

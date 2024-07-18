@@ -21,6 +21,9 @@ interface Stat {
     @Query("SELECT COUNT(1) FROM stats")
     fun count() : Int
 
+    @Query("SELECT COUNT(1) FROM stats WHERE wordUid = :wordUid AND isRemember = :isRemember")
+    fun countTotalByWord(wordUid: Int, isRemember: Boolean) : Long
+
     @Insert
     fun insert(stat: Stat)
 
