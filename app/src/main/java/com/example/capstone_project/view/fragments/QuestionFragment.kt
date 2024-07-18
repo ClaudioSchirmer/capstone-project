@@ -6,24 +6,38 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.icu.text.DateFormat
+import android.icu.text.SimpleDateFormat
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.capstone_project.R
+import com.example.capstone_project.application.word.AddStatCommand
+import com.example.capstone_project.application.word.AddStatCommandHandler
 import com.example.capstone_project.databinding.FragmentQuestionBinding
 import com.example.capstone_project.infrastructure.data.AppDatabase
+import com.example.capstone_project.infrastructure.data.entities.Stat
 import com.example.capstone_project.infrastructure.data.entities.Word
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
 import kotlin.math.sqrt
 import kotlin.random.Random
 import com.example.capstone_project.infrastructure.data.dao.Word as WordDao
+import com.example.capstone_project.infrastructure.data.dao.Stat as StatDao
 
 class QuestionFragment : Fragment(), SensorEventListener {
 
@@ -32,6 +46,7 @@ class QuestionFragment : Fragment(), SensorEventListener {
     private var param1: String? = null
     private lateinit var currentWord: Word
     private lateinit var wordDao: WordDao
+    private lateinit var statDao: StatDao
     private var pass: Int = 0
     private var fail: Int = 0
     private var total: Int = 0
@@ -90,6 +105,10 @@ class QuestionFragment : Fragment(), SensorEventListener {
     private fun onCheckedChange(group: ViewGroup, checkedId: Int) {
         val itemClicked = binding.root.findViewById<RadioButton>(checkedId)
         val wordToUpdate = currentWord.copy()
+
+        //var currentTime = LocalDateTime.now();
+        //var ft = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
         if (itemClicked.text == wordToUpdate.word) {
             wordToUpdate.pass++
             pass++
@@ -99,9 +118,26 @@ class QuestionFragment : Fragment(), SensorEventListener {
             fail++
             lastQuestionResult = false
         }
+
         lifecycleScope.launch(Dispatchers.IO) {
             wordDao.updatePass(wordToUpdate)
         }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            val cal = Calendar.getInstance()
+            val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+            cal.time = Date()
+
+            AddStatCommandHandler(requireContext()).insertOrUpdate(
+                AddStatCommand(
+                    dateInfo = df.format(cal.time),
+                    wordUid = wordToUpdate.uid,
+                    isRemember = lastQuestionResult
+                )
+            )
+        }
+
         binding.radioButtonOption1.isChecked = false
         binding.radioButtonOption2.isChecked = false
         binding.radioButtonOption3.isChecked = false
