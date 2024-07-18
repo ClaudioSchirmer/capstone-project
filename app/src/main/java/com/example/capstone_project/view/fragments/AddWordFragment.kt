@@ -63,7 +63,8 @@ class AddWordFragment : DialogFragment() {
                     AddWordCommand(
                         word = word,
                         tip = binding.editTextTip.text.toString(),
-                        definition = binding.editTextTextDefinition.text.toString()
+                        definition = binding.editTextDefinition.text.toString(),
+                        category = binding.editTextCategory.text.toString()
                     )
                 )
                 launch(Dispatchers.Main) {
