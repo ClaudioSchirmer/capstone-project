@@ -24,7 +24,8 @@ class AddWordCommandHandler(
                 uid = null,
                 word = command.word!!,
                 tip = command.tip,
-                definition = command.definition!!
+                definition = command.definition!!,
+                category = command.category
             )
         )
     }

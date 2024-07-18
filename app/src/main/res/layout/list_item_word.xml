@@ -11,6 +11,14 @@
         android:text="Word"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_word"
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"/>
+
     <ImageView
         android:id="@+id/btn_favorite"
         android:layout_width="24dp"
@@ -19,3 +27,4 @@
         android:layout_centerVertical="true"
         android:src="@drawable/ic_star_24_gray" />
 </RelativeLayout>
+
