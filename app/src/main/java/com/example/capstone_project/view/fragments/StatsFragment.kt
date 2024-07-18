@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.capstone_project.application.word.AddStatCommand
 import com.example.capstone_project.application.word.AddStatCommandHandler
 import com.example.capstone_project.databinding.FragmentStatsBinding
+import com.example.capstone_project.helper.ConstraintsHelper
 import com.example.capstone_project.infrastructure.data.AppDatabase
 import com.example.capstone_project.infrastructure.data.entities.ChartData
 import com.example.capstone_project.infrastructure.data.entities.Stat
@@ -47,7 +48,7 @@ class StatsFragment : Fragment() {
     ): View? {
         binding = FragmentStatsBinding.inflate(layoutInflater)
 
-        setUp(binding.chart)
+        setUp(binding.chartStats)
 
         return binding.root
     }
@@ -57,41 +58,48 @@ class StatsFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val statDao = AppDatabase(requireContext()).statDao()
-            val xLabels: MutableList<String> = mutableListOf("")
-            val cal = Calendar.getInstance()
-            val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-            val dfx: DateFormat = SimpleDateFormat("M/d")
-
-            cal.time = Date()
-            cal.add(Calendar.DATE, -7)
-
-            val oneWeekAgo = df.format(cal.time)
-            var chartDataRememberMap = statDao.getAllByDateInfoAndIsRemember(oneWeekAgo, true).associate { it.dateInfo to it.cnt }.toMap()
-            var chartDataForgottenMap = statDao.getAllByDateInfoAndIsRemember(oneWeekAgo, false).associate { it.dateInfo to it.cnt }.toMap()
-
             var charDataRememberList: MutableList<Int> = mutableListOf()
             var charDataForgottenList: MutableList<Int> = mutableListOf()
+            val xLabels: MutableList<String> = mutableListOf("")
+            val cal = Calendar.getInstance()
 
-            for (i in 1..7) {
+            cal.time = Date()
+            cal.add(Calendar.DATE, ConstraintsHelper.maxDay * -1)
+
+            var chartDataRememberMap = statDao.getAllByDateInfoAndIsRemember(
+                ConstraintsHelper.dfDateInfo.format(cal.time),
+                true
+            ).associate { it.dateInfo to it.cnt }.toMap()
+
+            var chartDataForgottenMap = statDao.getAllByDateInfoAndIsRemember(
+                ConstraintsHelper.dfDateInfo.format(cal.time),
+                false
+            ).associate { it.dateInfo to it.cnt }.toMap()
+
+            for (i in 1..ConstraintsHelper.maxDay) {
+
                 cal.add(Calendar.DATE, 1)
-                xLabels.add(dfx.format(cal.time))
+                xLabels.add(ConstraintsHelper.dfXAxis.format(cal.time))
 
-                if (chartDataRememberMap[df.format(cal.time)] == null) {
+                if (chartDataRememberMap[ConstraintsHelper.dfDateInfo.format(cal.time)] == null) {
                     charDataRememberList.add(0)
                 } else {
-                    chartDataRememberMap[df.format(cal.time)]?.let {
+                    chartDataRememberMap[ConstraintsHelper.dfDateInfo.format(cal.time)]?.let {
                         charDataRememberList.add(it)
                     }
                 }
 
-                if (chartDataForgottenMap[df.format(cal.time)] == null) {
+                if (chartDataForgottenMap[ConstraintsHelper.dfDateInfo.format(cal.time)] == null) {
                     charDataForgottenList.add(0)
                 } else {
-                    chartDataForgottenMap[df.format(cal.time)]?.let {
+                    chartDataForgottenMap[ConstraintsHelper.dfDateInfo.format(cal.time)]?.let {
                         charDataForgottenList.add(it)
                     }
                 }
             }
+
+            // for testing progress bar
+            delay(500)
 
             launch(Dispatchers.Main) {
                 setDataGroupChart(barChart, charDataRememberList, charDataForgottenList, xLabels)
@@ -137,24 +145,25 @@ class StatsFragment : Fragment() {
         legend.orientation = Legend.LegendOrientation.HORIZONTAL
         legend.setDrawInside(false)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val barDataSet1 = BarDataSet(getBarEntity(chartData1), "Remembered")
-            val barDataSet2 = BarDataSet(getBarEntity(chartData2), "Forgotten")
+        val barDataSet1 = BarDataSet(getBarEntity(chartData1), "Remembered")
+        val barDataSet2 = BarDataSet(getBarEntity(chartData2), "Forgotten")
 
-            barDataSet1.color = Color.BLUE
-            barDataSet2.color = Color.RED
+        barDataSet1.color = Color.BLUE
+        barDataSet2.color = Color.RED
 
-            val data = BarData(barDataSet1, barDataSet2)
-            data.barWidth = 0.4f
-            barChart.data = data
-            barChart.groupBars(0.5f, 0.2f, 0.01f)
-            barChart.invalidate()
-        }
+        val data = BarData(barDataSet1, barDataSet2)
+        data.barWidth = 0.4f
+        barChart.data = data
+        barChart.groupBars(0.5f, 0.2f, 0.01f)
+        barChart.invalidate()
+
+        binding.pbStats.visibility = View.GONE
+        binding.chartStats.visibility = View.VISIBLE
     }
 
     private fun getBarEntity(chartData: List<Int>): MutableList<BarEntry> {
         val barEntity = ArrayList<BarEntry>()
-        for (i in 1..7) {
+        for (i in 1..ConstraintsHelper.maxDay) {
             barEntity.add(BarEntry(i.toFloat(), chartData[i-1].toFloat()))
         }
         return barEntity

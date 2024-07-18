@@ -23,6 +23,7 @@ import com.example.capstone_project.R
 import com.example.capstone_project.application.word.AddStatCommand
 import com.example.capstone_project.application.word.AddStatCommandHandler
 import com.example.capstone_project.databinding.FragmentQuestionBinding
+import com.example.capstone_project.helper.ConstraintsHelper
 import com.example.capstone_project.infrastructure.data.AppDatabase
 import com.example.capstone_project.infrastructure.data.entities.Stat
 import com.example.capstone_project.infrastructure.data.entities.Word
@@ -106,9 +107,6 @@ class QuestionFragment : Fragment(), SensorEventListener {
         val itemClicked = binding.root.findViewById<RadioButton>(checkedId)
         val wordToUpdate = currentWord.copy()
 
-        //var currentTime = LocalDateTime.now();
-        //var ft = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
         if (itemClicked.text == wordToUpdate.word) {
             wordToUpdate.pass++
             pass++
@@ -126,12 +124,11 @@ class QuestionFragment : Fragment(), SensorEventListener {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val cal = Calendar.getInstance()
-            val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
             cal.time = Date()
 
             AddStatCommandHandler(requireContext()).insertOrUpdate(
                 AddStatCommand(
-                    dateInfo = df.format(cal.time),
+                    dateInfo = ConstraintsHelper.dfDateInfo.format(cal.time),
                     wordUid = wordToUpdate.uid,
                     isRemember = lastQuestionResult
                 )
