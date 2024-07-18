@@ -7,19 +7,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_gravity="start"
         android:layout_marginBottom="50dp"
-        android:background="#EFE9F4">
+        android:background="#EFE9F4"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
         <ImageButton
             android:id="@+id/imageButtonClose"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:backgroundTint="@android:color/transparent"/>
+            android:backgroundTint="@android:color/transparent"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
         <TextView
             android:id="@+id/textViewTitle"
@@ -34,15 +34,14 @@
 
         <Button
             android:id="@+id/buttonSave"
-            android:textSize="18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="@string/save"
-            android:textStyle="bold"
             android:background="@android:color/transparent"
+            android:text="@string/save"
             android:textColor="#0077CC"
-            />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -52,50 +51,56 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-    <EditText
-        android:id="@+id/editTextWord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/word" />
+        <EditText
+            android:id="@+id/editTextWord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/word" />
 
-    <TextView
-        android:id="@+id/textViewErrorWord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="#FF0000"
-        android:textStyle="bold"
-        android:gravity="end"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"/>
+        <TextView
+            android:id="@+id/textViewErrorWord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="end"
+            android:text="TextView"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextTip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/tip"
-        android:layout_marginBottom="25dp"/>
+        <EditText
+            android:id="@+id/editTextTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:hint="@string/tip" />
 
-    <EditText
-        android:id="@+id/editTextTextDefinition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:hint="@string/defintion"/>
+        <EditText
+            android:id="@+id/editTextDefinition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/defintion"
+            android:inputType="textMultiLine" />
 
-    <TextView
-        android:id="@+id/textViewErrorDefinition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_marginEnd="5dp"
-        android:gravity="end"
-        android:textColor="#FF0000"
-        android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textViewErrorDefinition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:gravity="end"
+            android:text="TextView"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/category"
+            android:inputType="text" />
 
     </LinearLayout>
-    <!-- Other input fields as needed -->
 
 </LinearLayout>

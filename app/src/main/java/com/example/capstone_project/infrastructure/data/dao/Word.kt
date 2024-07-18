@@ -21,6 +21,9 @@ interface Word {
     @Query("SELECT COUNT(1) FROM words")
     fun count() : Int
 
+    @Query("SELECT * FROM words WHERE category = :category")
+    fun findByCategory(category: String): List<Word>
+
     @Insert
     fun insert(word: Word)
 
