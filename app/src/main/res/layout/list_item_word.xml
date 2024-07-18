@@ -19,12 +19,51 @@
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/tv_category">
+
+        <TextView
+            android:id="@+id/tv_hits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#00FF00"/>
+        <TextView
+            android:id="@+id/tv_hits_desc"
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/tv_misses"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textAlignment="textEnd"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:textColor="#FF0000"/>
+        <TextView
+            android:id="@+id/tv_misses_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"/>
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/btn_favorite"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
         android:src="@drawable/ic_star_24_gray" />
 </RelativeLayout>
 

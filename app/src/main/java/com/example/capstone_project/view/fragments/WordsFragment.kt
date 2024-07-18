@@ -3,6 +3,7 @@ package com.example.capstone_project.view.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,13 +46,17 @@ class WordsFragment : Fragment() {
 
     private fun loadWords() {
         lifecycleScope.launch {
+            val database = AppDatabase.getDatabase(requireContext())
             val loadedWords = withContext(Dispatchers.IO) {
-                AppDatabase.getDatabase(requireContext()).wordDAO().getAll()
+                val statDao = database.statDao()
+                database.wordDAO().getAll().onEach {
+                    it.hits = statDao.countTotalByWord(it.uid!!, true)
+                    it.misses = statDao.countTotalByWord(it.uid, false)
+                }
             }
             words.clear()
             words.addAll(loadedWords)
             adapter.notifyDataSetChanged()
-
             if (words.isNotEmpty()) {
                 binding.textViewListEmpty.visibility = View.GONE
             } else {

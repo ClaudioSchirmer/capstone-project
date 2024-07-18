@@ -26,6 +26,10 @@ class WordsAdapter(
         val word = getItem(position)
         binding.tvWord.text = word?.word
         binding.tvCategory.text = word?.category
+        binding.tvHits.text = word?.hits?.toString() ?: "0"
+        binding.tvMisses.text = word?.misses?.toString() ?: "0"
+        binding.tvHitsDesc.text = if ((word?.hits ?: 0) == 1L) "Hit" else "Hits"
+        binding.tvMissesDesc.text = if ((word?.misses ?: 0) == 1L) "Miss" else "Misses"
 
         binding.btnFavorite.setImageResource(if (word?.isFavorite == true) R.drawable.ic_star_24_favourited else R.drawable.ic_star_24_gray)
 

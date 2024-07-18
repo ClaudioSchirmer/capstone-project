@@ -6,7 +6,7 @@ import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "stats", indices = [Index(value = ["dateInfo", "wordUid"], unique = true)])
+@Entity(tableName = "stats")
 data class Stat(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "dateInfo") var dateInfo: String,
