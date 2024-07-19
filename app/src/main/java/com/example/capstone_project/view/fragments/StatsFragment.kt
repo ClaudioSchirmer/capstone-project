@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import com.example.capstone_project.R
 import com.example.capstone_project.databinding.FragmentStatsBinding
 import com.example.capstone_project.helper.ConstraintsHelper
 import com.example.capstone_project.infrastructure.data.AppDatabase
@@ -29,20 +30,12 @@ class StatsFragment : Fragment() {
 
     private lateinit var binding: FragmentStatsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStatsBinding.inflate(layoutInflater)
-
         setUp(binding.chartStats)
-
         return binding.root
     }
 
@@ -51,42 +44,42 @@ class StatsFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val statDao = AppDatabase(requireContext()).statDao()
-            var charDataRememberList: MutableList<Int> = mutableListOf()
-            var charDataForgottenList: MutableList<Int> = mutableListOf()
+            val charDataRememberList: MutableList<Float> = mutableListOf()
+            val charDataForgottenList: MutableList<Float> = mutableListOf()
             val xLabels: MutableList<String> = mutableListOf("")
             val cal = Calendar.getInstance()
 
             cal.time = Date()
             cal.add(Calendar.DATE, ConstraintsHelper.maxDay * -1)
 
-            var chartDataRememberMap = statDao.getAllByDateInfoAndIsRemember(
+            val chartDataRememberMap = statDao.getAllByDateInfoAndIsRemember(
                 ConstraintsHelper.dfDateInfo.format(cal.time),
                 true
             ).associate { it.dateInfo to it.cnt }.toMap()
 
-            var chartDataForgottenMap = statDao.getAllByDateInfoAndIsRemember(
+            val chartDataForgottenMap = statDao.getAllByDateInfoAndIsRemember(
                 ConstraintsHelper.dfDateInfo.format(cal.time),
                 false
             ).associate { it.dateInfo to it.cnt }.toMap()
 
-            for (i in 1..ConstraintsHelper.maxDay) {
+            for (i in ConstraintsHelper.minDay..ConstraintsHelper.maxDay) {
 
                 cal.add(Calendar.DATE, 1)
                 xLabels.add(ConstraintsHelper.dfXAxis.format(cal.time))
 
                 if (chartDataRememberMap[ConstraintsHelper.dfDateInfo.format(cal.time)] == null) {
-                    charDataRememberList.add(0)
+                    charDataRememberList.add(0f)
                 } else {
                     chartDataRememberMap[ConstraintsHelper.dfDateInfo.format(cal.time)]?.let {
-                        charDataRememberList.add(it)
+                        charDataRememberList.add(it.toFloat())
                     }
                 }
 
                 if (chartDataForgottenMap[ConstraintsHelper.dfDateInfo.format(cal.time)] == null) {
-                    charDataForgottenList.add(0)
+                    charDataForgottenList.add(0f)
                 } else {
                     chartDataForgottenMap[ConstraintsHelper.dfDateInfo.format(cal.time)]?.let {
-                        charDataForgottenList.add(it)
+                        charDataForgottenList.add(it.toFloat())
                     }
                 }
             }
@@ -100,7 +93,7 @@ class StatsFragment : Fragment() {
         }
     }
 
-    private fun setDataGroupChart(barChart: BarChart, chartData1: List<Int>, chartData2: List<Int>, xLabels: List<String>) {
+    private fun setDataGroupChart(barChart: BarChart, chartData1: List<Float>, chartData2: List<Float>, xLabels: List<String>) {
 
         barChart.setDrawGridBackground(false)
         barChart.setDrawBarShadow(false)
@@ -138,8 +131,8 @@ class StatsFragment : Fragment() {
         legend.orientation = Legend.LegendOrientation.HORIZONTAL
         legend.setDrawInside(false)
 
-        val barDataSet1 = BarDataSet(getBarEntity(chartData1), "Remembered")
-        val barDataSet2 = BarDataSet(getBarEntity(chartData2), "Forgotten")
+        val barDataSet1 = BarDataSet(getBarEntity(chartData1), getString(R.string.stats_remembered))
+        val barDataSet2 = BarDataSet(getBarEntity(chartData2), getString(R.string.stats_forgotten))
 
         barDataSet1.color = Color.BLUE
         barDataSet2.color = Color.RED
@@ -154,10 +147,10 @@ class StatsFragment : Fragment() {
         binding.chartStats.visibility = View.VISIBLE
     }
 
-    private fun getBarEntity(chartData: List<Int>): MutableList<BarEntry> {
+    private fun getBarEntity(chartData: List<Float>): MutableList<BarEntry> {
         val barEntity = ArrayList<BarEntry>()
-        for (i in 1..ConstraintsHelper.maxDay) {
-            barEntity.add(BarEntry(i.toFloat(), chartData[i-1].toFloat()))
+        for (i in ConstraintsHelper.minDay..ConstraintsHelper.maxDay) {
+            barEntity.add(BarEntry(i.toFloat(), chartData[i-1]))
         }
         return barEntity
     }
