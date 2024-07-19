@@ -272,15 +272,13 @@ class QuestionFragment : Fragment(), SensorEventListener {
             acceleration = acceleration * 0.9f + delta
 
             val currentTime = System.currentTimeMillis()
-            if (acceleration > 5 && currentTime - lastShakeTime > 500) { // Reduced threshold and debounce time
+            if (acceleration > 5 && currentTime - lastShakeTime > 500) {
                 lastShakeTime = currentTime
-                // Show the tip in a toast
                 Toast.makeText(context, currentWord.tip, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Do nothing
     }
 }
