@@ -136,29 +136,37 @@ class QuestionFragment : Fragment(), SensorEventListener {
     private fun nextQuestion() {
         hide()
         val question = getNewQuestion()
-        question?.let {
-            total++
-            binding.textViewDefinition.text = question.definition
-            binding.radioButtonOption1.text = question.options[0]
-            binding.radioButtonOption2.text = question.options[1]
-            binding.radioButtonOption3.text = question.options[2]
-            binding.radioButtonOption4.text = question.options[3]
-            show()
-        } ?: run {
-            binding.textViewPassNumber.text = pass.toString()
-            binding.textViewFailNumber.text = fail.toString()
-            binding.textViewPlayedWithNumber.text = total.toString()
-            binding.progressBar.visibility = View.INVISIBLE
-            if (fail > 0) {
-                binding.textViewFail.visibility = View.VISIBLE
-                binding.textViewFailNumber.visibility = View.VISIBLE
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            question?.let {
+                total++
+                binding.textViewDefinition.text = question.definition
+                binding.radioButtonOption1.text = question.options[0]
+                binding.radioButtonOption2.text = question.options[1]
+                binding.radioButtonOption3.text = question.options[2]
+                binding.radioButtonOption4.text = question.options[3]
+                show()
+            } ?: run {
+                binding.textViewPassNumber.text = pass.toString()
+                binding.textViewFailNumber.text = fail.toString()
+                binding.textViewPlayedWithNumber.text = total.toString()
+                binding.progressBar.visibility = View.INVISIBLE
+
+                showFeedback(lastQuestionResult)
+                delay(1000)
+                hideFeedback()
+
+                if (fail > 0) {
+                    binding.textViewFail.visibility = View.VISIBLE
+                    binding.textViewFailNumber.visibility = View.VISIBLE
+                }
+                if (pass > 0) {
+                    binding.textViewPass.visibility = View.VISIBLE
+                    binding.textViewPassNumber.visibility = View.VISIBLE
+                }
+                binding.textViewPlayedWith.visibility = View.VISIBLE
+                binding.textViewPlayedWithNumber.visibility = View.VISIBLE
             }
-            if (pass > 0) {
-                binding.textViewPass.visibility = View.VISIBLE
-                binding.textViewPassNumber.visibility = View.VISIBLE
-            }
-            binding.textViewPlayedWith.visibility = View.VISIBLE
-            binding.textViewPlayedWithNumber.visibility = View.VISIBLE
         }
     }
 
