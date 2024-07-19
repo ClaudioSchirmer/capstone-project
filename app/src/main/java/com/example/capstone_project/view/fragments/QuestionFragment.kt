@@ -1,27 +1,19 @@
 package com.example.capstone_project.view.fragments
 
 import android.content.Context
-import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.icu.text.DateFormat
-import android.icu.text.SimpleDateFormat
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.capstone_project.R
-import com.example.capstone_project.application.word.AddStatCommand
-import com.example.capstone_project.application.word.AddStatCommandHandler
 import com.example.capstone_project.databinding.FragmentQuestionBinding
 import com.example.capstone_project.helper.ConstraintsHelper
 import com.example.capstone_project.infrastructure.data.AppDatabase
@@ -30,9 +22,6 @@ import com.example.capstone_project.infrastructure.data.entities.Word
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import kotlin.math.sqrt
@@ -79,6 +68,7 @@ class QuestionFragment : Fragment(), SensorEventListener {
         hide()
         lifecycleScope.launch(Dispatchers.IO) {
             wordDao = AppDatabase(requireContext()).wordDAO()
+            statDao = AppDatabase(requireContext()).statDao()
             words = wordDao.getAll()
             launch(Dispatchers.Main) {
                 nextQuestion()
@@ -126,11 +116,12 @@ class QuestionFragment : Fragment(), SensorEventListener {
             val cal = Calendar.getInstance()
             cal.time = Date()
 
-            AddStatCommandHandler(requireContext()).insertOrUpdate(
-                AddStatCommand(
+            statDao.insert(
+                Stat(
+                    uid = null,
                     dateInfo = ConstraintsHelper.dfDateInfo.format(cal.time),
-                    wordUid = wordToUpdate.uid,
-                    isRemember = lastQuestionResult
+                    wordUid = wordToUpdate.uid!!,
+                    isRemember = lastQuestionResult!!
                 )
             )
         }

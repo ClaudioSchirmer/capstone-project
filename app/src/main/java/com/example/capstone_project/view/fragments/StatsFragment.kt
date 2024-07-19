@@ -1,22 +1,15 @@
 package com.example.capstone_project.view.fragments
 
 import android.graphics.Color
-import android.icu.text.DateFormat
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import com.example.capstone_project.application.word.AddStatCommand
-import com.example.capstone_project.application.word.AddStatCommandHandler
 import com.example.capstone_project.databinding.FragmentStatsBinding
 import com.example.capstone_project.helper.ConstraintsHelper
 import com.example.capstone_project.infrastructure.data.AppDatabase
-import com.example.capstone_project.infrastructure.data.entities.ChartData
-import com.example.capstone_project.infrastructure.data.entities.Stat
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
