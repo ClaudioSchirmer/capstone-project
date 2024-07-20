@@ -94,12 +94,14 @@
             android:textColor="#FF0000"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTextCategory"
+        <Spinner
+            android:id="@+id/spinnerCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/category"
-            android:inputType="text" />
+            android:layout_below="@id/editTextDefinition"
+            android:layout_marginTop="8dp"
+            android:entries="@array/category_options" />
+
 
     </LinearLayout>
 

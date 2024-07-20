@@ -6,6 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.example.capstone_project.R
@@ -31,14 +34,16 @@ class AddWordFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAddWordBinding.inflate(layoutInflater)
+        binding = FragmentAddWordBinding.inflate(inflater, container, false)
+
+        setupCategorySpinner()
 
         binding.textViewTitle.text = getString(R.string.add_new_word)
         binding.textViewErrorDefinition.visibility = View.INVISIBLE
@@ -52,10 +57,24 @@ class AddWordFragment : DialogFragment() {
         return binding.root
     }
 
+    private fun setupCategorySpinner() {
+        val categories = listOf("Select Category") + resources.getStringArray(R.array.category_options)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCategory.adapter = adapter
+    }
+
     private fun onSaveTapped(view: View) {
+        val category = binding.spinnerCategory.selectedItem.toString()
+        if (category == "Select Category") {
+            showToast("Please select a valid category")
+            return
+        }
+
         binding.textViewErrorDefinition.visibility = View.INVISIBLE
         binding.textViewErrorWord.visibility = View.INVISIBLE
         binding.buttonSave.isEnabled = false
+
         lifecycleScope.launch(Dispatchers.IO) {
             runCatching {
                 val word = binding.editTextWord.text.toString()
@@ -64,7 +83,7 @@ class AddWordFragment : DialogFragment() {
                         word = word,
                         tip = binding.editTextTip.text.toString(),
                         definition = binding.editTextDefinition.text.toString(),
-                        category = binding.editTextCategory.text.toString()
+                        category = category
                     )
                 )
                 launch(Dispatchers.Main) {
@@ -72,23 +91,34 @@ class AddWordFragment : DialogFragment() {
                 }
             }.onFailure {
                 launch(Dispatchers.Main) {
-                    if (it is ApplicationNotification) {
-                        it.Notifications.firstOrNull { it.fieldName == "word" }?.let {
-                            binding.textViewErrorWord.text = it.message
-                            binding.textViewErrorWord.visibility = View.VISIBLE
-                        }
-                        it.Notifications.firstOrNull { it.fieldName == "definition" }?.let {
-                            binding.textViewErrorDefinition.text = it.message
-                            binding.textViewErrorDefinition.visibility = View.VISIBLE
-                        }
-                    }
+                    handleErrors(it)
                     binding.buttonSave.isEnabled = true
                 }
             }
         }
     }
 
+    private fun handleErrors(throwable: Throwable) {
+        if (throwable is ApplicationNotification) {
+            throwable.Notifications.forEach {
+                when (it.fieldName) {
+                    "word" -> showError(binding.textViewErrorWord, it.message)
+                    "definition" -> showError(binding.textViewErrorDefinition, it.message)
+                }
+            }
+        }
+    }
+
+    private fun showError(textView: TextView, message: String) {
+        textView.text = message
+        textView.visibility = View.VISIBLE
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
     internal fun interface OnAddWord {
-        fun onAddWord(word:String)
+        fun onAddWord(word: String)
     }
 }
