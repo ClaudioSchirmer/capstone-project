@@ -3,11 +3,11 @@ package com.example.capstone_project.view.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
+import android.widget.PopupMenu
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.capstone_project.adapter.WordsAdapter
@@ -21,7 +21,9 @@ import kotlinx.coroutines.withContext
 class WordsFragment : Fragment() {
     private lateinit var adapter: WordsAdapter
     private lateinit var words: MutableList<Word>
+    private lateinit var allWords: MutableList<Word>
     private lateinit var binding: FragmentWordsBinding
+    private var isFiltered: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +31,7 @@ class WordsFragment : Fragment() {
     ): View {
         binding = FragmentWordsBinding.inflate(inflater, container, false)
         words = mutableListOf()
+        allWords = mutableListOf()
         adapter = WordsAdapter(requireContext(), words, { word, view ->
             toggleFavorite(word)
         }, { word, view ->
@@ -41,9 +44,14 @@ class WordsFragment : Fragment() {
             loadWords()
         }
 
+        setHasOptionsMenu(true)
+        binding.fabClearFilter.setOnClickListener {
+            showAllWords()
+            binding.fabClearFilter.visibility = View.GONE
+            isFiltered = false
+        }
         return binding.root
     }
-
     private fun loadWords() {
         lifecycleScope.launch {
             val database = AppDatabase.getDatabase(requireContext())
@@ -56,12 +64,57 @@ class WordsFragment : Fragment() {
             }
             words.clear()
             words.addAll(loadedWords)
+            allWords.clear()
+            allWords.addAll(loadedWords)
             adapter.notifyDataSetChanged()
-            if (words.isNotEmpty()) {
-                binding.textViewListEmpty.visibility = View.GONE
-            } else {
-                binding.textViewListEmpty.visibility = View.VISIBLE
+            updateEmptyViewVisibility()
+        }
+    }
+
+    fun showAllWords() {
+        words.clear()
+        words.addAll(allWords)
+        adapter.notifyDataSetChanged()
+        updateEmptyViewVisibility()
+    }
+
+    fun filterWordsByCategory(category: String) {
+        lifecycleScope.launch {
+            val database = AppDatabase.getDatabase(requireContext())
+            val loadedWords = withContext(Dispatchers.IO) {
+                database.wordDAO().getWordsByCategory(category)
             }
+            if (loadedWords.isEmpty()) {
+                showNoCategoryDialog(category)
+            } else {
+                words.clear()
+                words.addAll(loadedWords)
+                adapter.notifyDataSetChanged()
+                binding.fabClearFilter.visibility = View.VISIBLE
+                isFiltered = true
+            }
+        }
+    }
+
+    private fun showNoCategoryDialog(category: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("No Category Found")
+            .setMessage("Sorry, there's no category of $category.")
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    fun filterWordsByFavoriteStatus(isFavorite: Boolean) {
+        lifecycleScope.launch {
+            val database = AppDatabase.getDatabase(requireContext())
+            val loadedWords = withContext(Dispatchers.IO) {
+                database.wordDAO().getWordsByFavoriteStatus(isFavorite)
+            }
+            words.clear()
+            words.addAll(loadedWords)
+            adapter.notifyDataSetChanged()
+            binding.fabClearFilter.visibility = View.VISIBLE
+            isFiltered = true
         }
     }
 
@@ -104,5 +157,9 @@ class WordsFragment : Fragment() {
             }
         }
         menu.show()
+    }
+
+    private fun updateEmptyViewVisibility() {
+        binding.textViewListEmpty.visibility = if (words.isEmpty()) View.VISIBLE else View.GONE
     }
 }

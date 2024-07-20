@@ -34,21 +34,4 @@
     <string name="question_result_pass">The answer is correct.\nTotal correct: %d</string>
     <string name="question_result_fail">The answer is incorrect.\nTotal incorrect: %d</string>
     <string name="category">Category</string>
-    <string name="stats_remembered">Remembered</string>
-    <string name="stats_forgotten">Forgotten</string>
-    <string-array name="category_options">
-        <item>Noun</item>
-        <item>Pronoun</item>
-        <item>Verb</item>
-        <item>Adverb</item>
-        <item>Adjective</item>
-        <item>Preposition</item>
-        <item>Conjunction</item>
-        <item>Interjection</item>
-        <item>Article</item>
-        <item>Determiner</item>
-        <item>Participle</item>
-        <item>Gerund</item>
-    </string-array>
-
 </resources>

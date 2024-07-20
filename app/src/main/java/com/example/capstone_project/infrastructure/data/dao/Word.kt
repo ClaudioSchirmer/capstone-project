@@ -24,6 +24,12 @@ interface Word {
     @Query("SELECT * FROM words WHERE category = :category")
     fun findByCategory(category: String): List<Word>
 
+    @Query("SELECT * FROM words WHERE isFavorite = :isFavorite")
+    fun getWordsByFavoriteStatus(isFavorite: Boolean): List<Word>
+
+    @Query("SELECT * FROM words WHERE category = :category")
+    fun getWordsByCategory(category: String): List<Word>
+
     @Insert
     fun insert(word: Word)
 
