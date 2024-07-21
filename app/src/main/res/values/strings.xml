@@ -33,5 +33,9 @@
     <string name="words_available">%1$s words</string>
     <string name="question_result_pass">The answer is correct.\nTotal correct: %d</string>
     <string name="question_result_fail">The answer is incorrect.\nTotal incorrect: %d</string>
-    <string name="category">Category</string>
+    <string name="listcategory">Enter the category of the word</string>
+    <string name="hint">category</string>
+    <string name="clear_filter">Clear Filter</string>
+    <string name="stats_remembered">Remembered</string>
+    <string name="stats_forgotten">Forgotten</string>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_options">
+        <item>Noun</item>
+        <item>Pronoun</item>
+        <item>Verb</item>
+        <item>Adverb</item>
+        <item>Adjective</item>
+        <item>Preposition</item>
+        <item>Conjunction</item>
+        <item>Interjection</item>
+        <item>Article</item>
+        <item>Determiner</item>
+        <item>Participle</item>
+        <item>Gerund</item>
+    </string-array>
+</resources>
+
