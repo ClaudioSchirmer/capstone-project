@@ -38,4 +38,7 @@
     <string name="clear_filter">Clear Filter</string>
     <string name="stats_remembered">Remembered</string>
     <string name="stats_forgotten">Forgotten</string>
+    <string name="play_by_category">Play by Category</string>
+    <string name="filter_favorites">Filter Favorites</string>
+    <string name="filter_category">Filter Category</string>
 </resources>
