@@ -29,7 +29,7 @@ import kotlin.random.Random
 import com.example.capstone_project.infrastructure.data.dao.Word as WordDao
 import com.example.capstone_project.infrastructure.data.dao.Stat as StatDao
 
-class QuestionFragment : Fragment(), SensorEventListener {
+class QuestionFragment(private val category: String?) : Fragment(), SensorEventListener {
 
     private lateinit var binding: FragmentQuestionBinding
     private lateinit var words: List<Word>
@@ -69,7 +69,9 @@ class QuestionFragment : Fragment(), SensorEventListener {
         lifecycleScope.launch(Dispatchers.IO) {
             wordDao = AppDatabase(requireContext()).wordDAO()
             statDao = AppDatabase(requireContext()).statDao()
-            words = wordDao.getAll()
+            words = category?.let {
+                wordDao.findByCategory(it)
+            } ?: wordDao.getAll()
             launch(Dispatchers.Main) {
                 nextQuestion()
             }

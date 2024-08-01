@@ -8,10 +8,10 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_filter_favorites"
-        android:title="Filter Favorites"
+        android:title="@string/filter_favorites"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_enter_category"
-        android:title="Filter Category"
+        android:title="@string/filter_category"
         app:showAsAction="never" />
 </menu>

@@ -12,10 +12,11 @@ import com.example.capstone_project.R
 import com.example.capstone_project.databinding.FragmentPlayBinding
 import com.example.capstone_project.infrastructure.data.AppDatabase
 import com.example.capstone_project.main.BottomNavigationViewController
+import com.example.capstone_project.view.ChooseCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PlayFragment : Fragment() {
+class PlayFragment : Fragment(), ChooseCategory.onClick {
 
     private lateinit var binding: FragmentPlayBinding
     private var bottomNavigationViewController: BottomNavigationViewController? = null
@@ -31,7 +32,8 @@ class PlayFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPlayBinding.inflate(layoutInflater)
-        binding.buttonPlay.setOnClickListener(::onPlayRandomly)
+        binding.buttonPlay.setOnClickListener(::onPlay)
+        binding.buttonPlayCategory.setOnClickListener(::onPlayByCategory)
         binding.buttonStop.setOnClickListener(::onStopPlaying)
         binding.buttonStop.visibility = View.INVISIBLE
         binding.textViewPlayWith.visibility = View.INVISIBLE
@@ -47,7 +49,31 @@ class PlayFragment : Fragment() {
         return binding.root
     }
 
-    private fun onPlayRandomly(view: View) {
+    private fun onPlayByCategory(view: View) {
+        ChooseCategory(this).show(parentFragmentManager, "ChooseCategory")
+    }
+
+    override fun onCategorySelected(category: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val numberOfWordsByCategory = AppDatabase(requireContext()).wordDAO().countByCategory(category)
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (numberOfWordsByCategory < 4) {
+                    AlertDialog.Builder(requireContext()).apply {
+                        setTitle("Missing Words")
+                        setMessage("You should have at least 4 words registered in the category $category before starting to play")
+                        setPositiveButton("Ok") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                    }.create().show()
+                } else {
+                    onPlay(null, category)
+                }
+            }
+
+        }
+    }
+
+    private fun onPlay(view: View?, category: String? = null) {
         if (numberOfWords < 4) {
             AlertDialog.Builder(requireContext()).apply {
                 setTitle("Missing Words")
@@ -58,14 +84,16 @@ class PlayFragment : Fragment() {
             }.create().show()
         } else {
             binding.buttonPlay.visibility = View.INVISIBLE
+            binding.buttonPlayCategory.visibility = View.INVISIBLE
             binding.buttonPlay.alpha = 0f
+            binding.buttonPlayCategory.alpha = 0f
             binding.textViewPlayWith.visibility = View.INVISIBLE
             binding.textViewPlayWith.alpha = 0f
             binding.textViewPlayWithNumber.visibility = View.INVISIBLE
             binding.textViewPlayWithNumber.alpha = 0f
             bottomNavigationViewController?.hide {
                 with(childFragmentManager.beginTransaction()) {
-                    replace(R.id.fragmentContainerPlay, QuestionFragment(), "QuestionFragment")
+                    replace(R.id.fragmentContainerPlay, QuestionFragment(category), "QuestionFragment")
                     commit()
                 }
                 binding.buttonStop.visibility = View.VISIBLE
@@ -86,6 +114,8 @@ class PlayFragment : Fragment() {
         bottomNavigationViewController?.show {
             binding.buttonPlay.visibility = View.VISIBLE
             binding.buttonPlay.animate().alpha(1f).setDuration(1000).start()
+            binding.buttonPlayCategory.visibility = View.VISIBLE
+            binding.buttonPlayCategory.animate().alpha(1f).setDuration(1000).start()
             binding.textViewPlayWith.visibility = View.VISIBLE
             binding.textViewPlayWith.animate().alpha(1f).setDuration(1000).start()
             binding.textViewPlayWithNumber.visibility = View.VISIBLE

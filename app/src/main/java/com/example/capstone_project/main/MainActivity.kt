@@ -1,6 +1,7 @@
 package com.example.capstone_project.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -38,34 +39,38 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
         binding = ActivityMainBinding.inflate(layoutInflater)
         preferences = PreferenceUtil(binding.root.context)
         setContentView(binding.root)
-
-        if (savedInstanceState == null) {
-            showFragment(WordsFragment())
-        }
+        WordsFragment().show()
 
         binding.tabNavigation.setOnItemSelectedListener {
-            val fragment = when (it.itemId) {
-                R.id.bottom_menu_list -> WordsFragment()
-                R.id.bottom_menu_play -> PlayFragment()
-                R.id.bottom_menu_stats -> StatsFragment()
-                R.id.bottom_menu_settings -> SettingsFragment()
-                else -> return@setOnItemSelectedListener false
+            when (it.itemId) {
+                R.id.bottom_menu_list -> {
+                    menu.clear()
+                    menuInflater.inflate(R.menu.words, menu)
+                    WordsFragment().show()
+                }
+                R.id.bottom_menu_play -> {
+                    menu.clear()
+                    PlayFragment().show()
+                }
+                R.id.bottom_menu_stats -> {
+                    menu.clear()
+                    StatsFragment().show()
+                }
+                R.id.bottom_menu_settings -> {
+                    menu.clear()
+                    SettingsFragment().show()
+                }
             }
-            showFragment(fragment)
             true
         }
-    }
-
-    private fun showFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment)
-            .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.menu = menu!!
         val inflater = menuInflater
-        inflater.inflate(R.menu.words, menu)
+        if (lastFragmentName == "WordsFragment") {
+            inflater.inflate(R.menu.words, menu)
+        }
         return true
     }
 
