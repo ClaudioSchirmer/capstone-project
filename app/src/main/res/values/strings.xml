@@ -6,7 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="word">Word*</string>
     <string name="tip">Tip</string>
-    <string name="defintion">Defintion*</string>
+    <string name="definition">Definition*</string>
     <string name="words">Words</string>
     <string name="play">Play</string>
     <string name="notification">Notification</string>
@@ -41,4 +41,5 @@
     <string name="play_by_category">Play by Category</string>
     <string name="filter_favorites">Filter Favorites</string>
     <string name="filter_category">Filter Category</string>
+    <string name="search_word">Search word</string>
 </resources>

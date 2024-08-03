@@ -1,11 +1,11 @@
 package com.example.capstone_project.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
     BottomNavigationViewController {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var menu: Menu
+    private var menu: Menu? = null
     private var lastFragmentName: String? = "WordsFragment"
 
     companion object {
@@ -44,20 +44,20 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
         binding.tabNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_menu_list -> {
-                    menu.clear()
+                    menu?.clear()
                     menuInflater.inflate(R.menu.words, menu)
                     WordsFragment().show()
                 }
                 R.id.bottom_menu_play -> {
-                    menu.clear()
+                    menu?.clear()
                     PlayFragment().show()
                 }
                 R.id.bottom_menu_stats -> {
-                    menu.clear()
+                    menu?.clear()
                     StatsFragment().show()
                 }
                 R.id.bottom_menu_settings -> {
-                    menu.clear()
+                    menu?.clear()
                     SettingsFragment().show()
                 }
             }
@@ -66,12 +66,36 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        this.menu = menu!!
+        this.menu = menu
         val inflater = menuInflater
         if (lastFragmentName == "WordsFragment") {
             inflater.inflate(R.menu.words, menu)
+
+            val searchItem = menu?.findItem(R.id.action_search)
+            val searchView = searchItem?.actionView as? SearchView
+
+            searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        searchWords(it)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        searchWords(it)
+                    }
+                    return true
+                }
+            })
         }
         return true
+    }
+
+    private fun searchWords(query: String) {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? WordsFragment
+        fragment?.searchWords(query)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

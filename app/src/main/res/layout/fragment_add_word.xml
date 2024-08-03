@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="@string/defintion"
+            android:hint="@string/definition"
             android:inputType="textMultiLine" />
 
         <TextView
