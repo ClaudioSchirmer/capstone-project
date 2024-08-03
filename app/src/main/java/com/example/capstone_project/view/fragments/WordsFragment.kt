@@ -3,13 +3,12 @@ package com.example.capstone_project.view.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.capstone_project.R
 import com.example.capstone_project.adapter.WordsAdapter
 import com.example.capstone_project.databinding.FragmentWordsBinding
 import com.example.capstone_project.infrastructure.data.AppDatabase
@@ -52,6 +51,26 @@ class WordsFragment : Fragment() {
         }
         return binding.root
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_sort, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.sort_hits -> {
+                showHitsOnly()
+                return true
+            }
+            R.id.sort_misses -> {
+                showMissesOnly()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun loadWords() {
         lifecycleScope.launch {
             val database = AppDatabase.getDatabase(requireContext())
@@ -66,15 +85,16 @@ class WordsFragment : Fragment() {
             words.addAll(loadedWords)
             allWords.clear()
             allWords.addAll(loadedWords)
-            adapter.notifyDataSetChanged()
+            adapter.updateWords(loadedWords)
             updateEmptyViewVisibility()
         }
     }
 
-    fun showAllWords() {
+    private fun showAllWords() {
         words.clear()
         words.addAll(allWords)
-        adapter.notifyDataSetChanged()
+        adapter.updateWords(allWords)
+        adapter.showAll()
         updateEmptyViewVisibility()
     }
 
@@ -89,13 +109,12 @@ class WordsFragment : Fragment() {
             } else {
                 words.clear()
                 words.addAll(loadedWords)
-                adapter.notifyDataSetChanged()
+                adapter.updateWords(loadedWords)
                 binding.fabClearFilter.visibility = View.VISIBLE
                 isFiltered = true
             }
         }
     }
-
     private fun showNoCategoryDialog(category: String) {
         AlertDialog.Builder(requireContext())
             .setTitle("No Category Found")
@@ -112,25 +131,37 @@ class WordsFragment : Fragment() {
             }
             words.clear()
             words.addAll(loadedWords)
-            adapter.notifyDataSetChanged()
+            adapter.updateWords(loadedWords)
             binding.fabClearFilter.visibility = View.VISIBLE
             isFiltered = true
         }
     }
 
+    private fun showHitsOnly() {
+        val hitsOnly = allWords.filter { it.hits > 0 }
+        words.clear()
+        words.addAll(hitsOnly.sortedByDescending { it.hits })
+        adapter.updateWords(words)
+        adapter.showHitsOnly()  // Ensure adapter shows only hits
+        binding.fabClearFilter.visibility = View.VISIBLE
+        isFiltered = true
+        updateEmptyViewVisibility()
+    }
+
+    private fun showMissesOnly() {
+        val missesOnly = allWords.filter { it.misses > 0 }
+        words.clear()
+        words.addAll(missesOnly.sortedByDescending { it.misses })
+        adapter.updateWords(words)
+        adapter.showMissesOnly()  // Ensure adapter shows only misses
+        binding.fabClearFilter.visibility = View.VISIBLE
+        isFiltered = true
+        updateEmptyViewVisibility()
+    }
     private fun toggleFavorite(word: Word) {
         word.isFavorite = !word.isFavorite
         lifecycleScope.launch(Dispatchers.IO) {
             AppDatabase.getDatabase(requireContext()).wordDAO().updateFavoriteStatus(word)
-            withContext(Dispatchers.Main) {
-                loadWords()
-            }
-        }
-    }
-
-    fun addWordToList(wordText: String) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            AppDatabase.getDatabase(requireContext()).wordDAO().findByWord(wordText)
             withContext(Dispatchers.Main) {
                 loadWords()
             }
@@ -163,6 +194,22 @@ class WordsFragment : Fragment() {
         binding.textViewListEmpty.visibility = if (words.isEmpty()) View.VISIBLE else View.GONE
     }
 
+    fun addWordToList(wordText: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val database = AppDatabase.getDatabase(requireContext())
+            val word = database.wordDAO().findByWord(wordText)
+            withContext(Dispatchers.Main) {
+                if (word != null) {
+                    allWords.add(word)
+                    words.clear()
+                    words.addAll(allWords)
+                    adapter.updateWords(words)
+                    updateEmptyViewVisibility()
+                }
+            }
+        }
+    }
+
     fun searchWords(query: String) {
         if (!::allWords.isInitialized) {
             return
@@ -174,3 +221,4 @@ class WordsFragment : Fragment() {
         updateEmptyViewVisibility()
     }
 }
+

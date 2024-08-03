@@ -164,6 +164,8 @@ class MainActivity : AppCompatActivity(), AddWordFragment.OnAddWord,
         addWordFragment?.dismiss()
     }
 
+
+
     private fun Fragment.show() {
         with(supportFragmentManager.beginTransaction()) {
             val fragmentToUpdate = this@show::class.simpleName

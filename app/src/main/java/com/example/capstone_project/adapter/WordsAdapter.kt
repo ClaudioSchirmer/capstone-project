@@ -11,10 +11,13 @@ import com.example.capstone_project.infrastructure.data.entities.Word
 
 class WordsAdapter(
     private val context: Context,
-    private val words: List<Word>,
+    private var words: List<Word>,
     private val onFavoriteClick: (Word, View) -> Unit,
     private val onWordClick: (Word, View) -> Unit
 ) : ArrayAdapter<Word>(context, 0, words) {
+
+    private var showHitsOnly: Boolean = false
+    private var showMissesOnly: Boolean = false
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val binding = if (convertView == null) {
@@ -31,6 +34,23 @@ class WordsAdapter(
         binding.tvHitsDesc.text = if ((word?.hits ?: 0) == 1L) "Hit" else "Hits"
         binding.tvMissesDesc.text = if ((word?.misses ?: 0) == 1L) "Miss" else "Misses"
 
+        if (showHitsOnly) {
+            binding.tvHits.visibility = View.VISIBLE
+            binding.tvHitsDesc.visibility = View.VISIBLE
+            binding.tvMisses.visibility = View.GONE
+            binding.tvMissesDesc.visibility = View.GONE
+        } else if (showMissesOnly) {
+            binding.tvHits.visibility = View.GONE
+            binding.tvHitsDesc.visibility = View.GONE
+            binding.tvMisses.visibility = View.VISIBLE
+            binding.tvMissesDesc.visibility = View.VISIBLE
+        } else {
+            binding.tvHits.visibility = View.VISIBLE
+            binding.tvHitsDesc.visibility = View.VISIBLE
+            binding.tvMisses.visibility = View.VISIBLE
+            binding.tvMissesDesc.visibility = View.VISIBLE
+        }
+
         binding.btnFavorite.setImageResource(if (word?.isFavorite == true) R.drawable.ic_star_24_favourited else R.drawable.ic_star_24_gray)
 
         binding.btnFavorite.setOnClickListener {
@@ -42,5 +62,28 @@ class WordsAdapter(
         }
 
         return binding.root
+    }
+
+    fun updateWords(newWords: List<Word>) {
+        words = newWords
+        notifyDataSetChanged()
+    }
+
+    fun showHitsOnly() {
+        showHitsOnly = true
+        showMissesOnly = false
+        notifyDataSetChanged()
+    }
+
+    fun showMissesOnly() {
+        showHitsOnly = false
+        showMissesOnly = true
+        notifyDataSetChanged()
+    }
+
+    fun showAll() {
+        showHitsOnly = false
+        showMissesOnly = false
+        notifyDataSetChanged()
     }
 }
