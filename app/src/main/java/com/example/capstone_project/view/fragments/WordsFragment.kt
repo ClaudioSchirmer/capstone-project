@@ -162,4 +162,15 @@ class WordsFragment : Fragment() {
     private fun updateEmptyViewVisibility() {
         binding.textViewListEmpty.visibility = if (words.isEmpty()) View.VISIBLE else View.GONE
     }
+
+    fun searchWords(query: String) {
+        if (!::allWords.isInitialized) {
+            return
+        }
+        val filteredWords = allWords.filter { it.word.contains(query, ignoreCase = true) }
+        words.clear()
+        words.addAll(filteredWords)
+        adapter.notifyDataSetChanged()
+        updateEmptyViewVisibility()
+    }
 }
